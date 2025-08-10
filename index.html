@@ -5,32 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Nish — Training Log</title>
   <link rel="stylesheet" href="styles.css"/>
-  <!-- Chart.js CDN for progress charts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <header>
     <h1>Training Log</h1>
-    <nav>
-      <button class="tab-btn active" data-tab="log">Log Workout</button>
-      <button class="tab-btn" data-tab="history">History</button>
-      <button class="tab-btn" data-tab="progress">Progress</button>
-      <button class="tab-btn" data-tab="settings">Settings</button>
+    <nav class="top-tabs">
+      <button class="tab-btn active" data-tab="log" aria-controls="log" aria-selected="true">Log Workout</button>
+      <button class="tab-btn" data-tab="history" aria-controls="history" aria-selected="false">History</button>
+      <button class="tab-btn" data-tab="progress" aria-controls="progress" aria-selected="false">Progress</button>
+      <button class="tab-btn" data-tab="settings" aria-controls="settings" aria-selected="false">Settings</button>
     </nav>
   </header>
 
   <main>
     <!-- LOG TAB -->
-    <section id="log" class="tab-pane active">
+    <section id="log" class="tab-pane active" role="tabpanel" aria-labelledby="Log Workout">
       <div class="panel">
-        <h2>New Workout</h2>
+        <h2>Log Workout</h2>
+        <p class="hint">Choose a category (editable presets) and log your sets. Saved workouts appear in <strong>History</strong> with inline edit/delete.</p>
+
+        <div class="row rest-row">
+          <div class="rest-timer card">
+            <strong>Rest Timer</strong>
+            <div class="rest-display"><span id="rest-mm">00</span>:<span id="rest-ss">00</span></div>
+            <div class="rest-controls">
+              <button type="button" class="btn-ghost rest-start" data-sec="60">60s</button>
+              <button type="button" class="btn-ghost rest-start" data-sec="90">90s</button>
+              <button type="button" class="btn-ghost rest-start" data-sec="120">120s</button>
+              <input type="number" id="rest-custom" placeholder="sec" min="1"/>
+              <button type="button" class="btn-accent" id="rest-start-custom">Start</button>
+              <button type="button" class="btn-danger" id="rest-stop">Stop</button>
+            </div>
+          </div>
+        </div>
+
         <form id="workout-form">
+          <input type="hidden" id="edit-id" value=""/>
           <div class="row">
             <label>Date
               <input type="date" id="wdate" required />
             </label>
-            <label>Day / Split
-              <input type="text" id="wsplit" placeholder="e.g., Pull, Push, Legs" required />
+            <label>Category / Split
+              <div class="cat-inline">
+                <select id="wsplit" required></select>
+                <span id="cat-color-dot" class="dot"></span>
+                <button type="button" id="manage-cats" class="btn-ghost">Manage</button>
+              </div>
             </label>
             <label>Notes
               <input type="text" id="wnotes" placeholder="optional"/>
@@ -45,27 +66,35 @@
                 <option value="">— choose —</option>
               </select>
             </label>
-            <button type="button" id="add-exercise">Add Exercise</button>
+            <button type="button" id="add-exercise" class="btn-accent">+ Add Exercise</button>
           </div>
 
           <div class="actions">
-            <button type="submit">Save Workout</button>
-            <button type="button" id="clear-form">Clear</button>
+            <button type="submit" class="btn-primary" id="save-btn">Save Workout</button>
+            <button type="button" id="clear-form" class="btn-ghost">Clear</button>
           </div>
         </form>
       </div>
     </section>
 
     <!-- HISTORY TAB -->
-    <section id="history" class="tab-pane">
+    <section id="history" class="tab-pane" role="tabpanel" aria-labelledby="History">
       <div class="panel">
-        <h2>Workout History</h2>
+        <div class="flex-between">
+          <h2>History</h2>
+          <div class="subtabs" role="tablist" aria-label="History filters">
+            <button class="subtab-btn active" data-filter="all" aria-selected="true">All</button>
+            <button class="subtab-btn" data-filter="Push" aria-selected="false">Push</button>
+            <button class="subtab-btn" data-filter="Pull" aria-selected="false">Pull</button>
+            <button class="subtab-btn" data-filter="Legs" aria-selected="false">Legs</button>
+          </div>
+        </div>
         <div id="history-list"></div>
       </div>
     </section>
 
     <!-- PROGRESS TAB -->
-    <section id="progress" class="tab-pane">
+    <section id="progress" class="tab-pane" role="tabpanel" aria-labelledby="Progress">
       <div class="panel">
         <h2>Progress</h2>
         <div class="row">
@@ -79,22 +108,41 @@
               <option value="volume">Weekly Volume (kg)</option>
             </select>
           </label>
-          <button id="refresh-progress" type="button">Refresh</button>
+          <button id="refresh-progress" type="button" class="btn-accent">Refresh</button>
         </div>
-        <canvas id="progress-chart" height="120"></canvas>
+        <div class="chart-wrap">
+          <canvas id="progress-chart" height="140"></canvas>
+        </div>
         <div id="progress-summary" class="summary"></div>
       </div>
     </section>
 
     <!-- SETTINGS TAB -->
-    <section id="settings" class="tab-pane">
+    <section id="settings" class="tab-pane" role="tabpanel" aria-labelledby="Settings">
       <div class="panel">
         <h2>Settings</h2>
+
+        <h3>Categories</h3>
+        <p class="hint">Presets power the split selector. Add your own (choose a color).</p>
+        <div id="cat-list" class="cat-list"></div>
         <div class="row">
-          <button id="export-json" type="button">Export Data (JSON)</button>
+          <label>Name
+            <input type="text" id="cat-name" placeholder="e.g., Upper, Push, etc."/>
+          </label>
+          <label>Color
+            <input type="color" id="cat-color" value="#6c8cff"/>
+          </label>
+          <button id="cat-add" class="btn-accent" type="button">Add / Update</button>
+          <button id="cat-clear" class="btn-ghost" type="button">Clear</button>
+        </div>
+
+        <hr class="sep"/>
+
+        <div class="row">
+          <button id="export-json" type="button" class="btn-primary">Export Data (JSON)</button>
           <input type="file" id="import-file" accept="application/json"/>
-          <button id="import-json" type="button">Import</button>
-          <button id="reset-data" type="button">Reset All Data</button>
+          <button id="import-json" type="button" class="btn-accent">Import</button>
+          <button id="reset-data" type="button" class="btn-danger">Reset All Data</button>
         </div>
         <p class="hint">Data is saved in your browser via localStorage. Export regularly if you change devices.</p>
       </div>
@@ -106,7 +154,7 @@
   </footer>
 
   <template id="exercise-template">
-    <div class="exercise">
+    <div class="exercise card">
       <div class="row">
         <label>Exercise
           <input type="text" class="ex-name" placeholder="e.g., Lat Pulldown" required />
@@ -114,14 +162,14 @@
         <label>Notes
           <input type="text" class="ex-notes" placeholder="tempo / form cue (optional)"/>
         </label>
-        <button class="danger remove-ex" type="button">Remove Exercise</button>
+        <button class="remove-ex btn-danger" type="button">Remove Exercise</button>
       </div>
       <div class="sets">
         <div class="set-row header">
-          <span>#</span><span>Weight (kg)</span><span>Reps</span><span>Failure</span><span>Remove</span>
+          <span>#</span><span>Weight (kg)</span><span>Reps</span><span>RPE</span><span>Failure</span><span>Remove</span>
         </div>
         <div class="set-container"></div>
-        <button class="add-set" type="button">+ Add Set</button>
+        <button class="add-set btn-ghost" type="button">+ Add Set</button>
       </div>
     </div>
   </template>
@@ -131,8 +179,9 @@
       <span class="set-idx"></span>
       <input type="number" step="0.01" min="0" class="set-weight" placeholder="kg" required />
       <input type="number" min="1" class="set-reps" placeholder="reps" required />
+      <input type="number" min="1" max="10" class="set-rpe" placeholder="RPE" />
       <input type="checkbox" class="set-failure" />
-      <button class="remove-set danger" type="button">✕</button>
+      <button class="remove-set btn-danger" type="button">✕</button>
     </div>
   </template>
 
