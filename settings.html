@@ -6,24 +6,57 @@
   <title>Settings</title>
   <link rel="stylesheet" href="styles.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Early theme apply to avoid FOUC
+    (function(){
+      try {
+        const t = localStorage.getItem('nish_theme') || 'light';
+        const acc = localStorage.getItem('nish_accent') || '#3b82f6';
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.style.setProperty('--accent', acc);
+      } catch(e){}
+    })();
+  </script>
 </head>
 
 <body data-page="settings">
 
   <header class="site-header">
-    <div class="brand">Nish • Training</div>
+    <a class="brand" href="index.html">NG’s Workout Log</a>
     <nav class="main-nav">
-      <a href="index.html">Log</a>
+      <a href="log.html">Log</a>
       <a href="history.html">History</a>
       <a href="progress.html">Progress</a>
       <a href="weight.html">Weight</a>
+      <a href="programs.html">Programs</a>
       <a href="settings.html">Settings</a>
     </nav>
+    <div class="quick-theme">
+      <button id="theme-toggle" class="btn-ghost small">🌓</button>
+    </div>
   </header>
 
   <main class="container">
     <section class="panel">
       <h1>Settings</h1>
+
+      <h3>Appearance</h3>
+      <div class="row">
+        <label>Theme
+          <select id="theme-select">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+        <label>Accent Color
+          <input type="color" id="accent-color" value="#3b82f6"/>
+        </label>
+        <button id="apply-theme" class="btn-accent" type="button">Apply</button>
+      </div>
+      <p class="hint">You can also toggle quickly via the 🌓 button in the header.</p>
+
+      <hr class="sep"/>
+
       <h3>Categories</h3>
       <p class="hint">Presets power the split selector. Add your own (choose a color).</p>
       <div id="cat-list" class="cat-list"></div>
@@ -32,7 +65,7 @@
           <input type="text" id="cat-name" placeholder="e.g., Upper, Push, etc."/>
         </label>
         <label>Color
-          <input type="color" id="cat-color" value="#6c8cff"/>
+          <input type="color" id="cat-color" value="#3b82f6"/>
         </label>
         <button id="cat-add" class="btn-accent" type="button">Add / Update</button>
         <button id="cat-clear" class="btn-ghost" type="button">Clear</button>
@@ -49,11 +82,6 @@
       <p class="hint">Data is saved in your browser via localStorage. Export regularly if you change devices.</p>
     </section>
   </main>
-
-  <footer>
-    <small>Progressive overload, intelligently. 💪</small>
-  </footer>
-
   <script src="app.js"></script>
 </body>
 </html>

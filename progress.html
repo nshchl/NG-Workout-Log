@@ -6,19 +6,34 @@
   <title>Progress</title>
   <link rel="stylesheet" href="styles.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Early theme apply to avoid FOUC
+    (function(){
+      try {
+        const t = localStorage.getItem('nish_theme') || 'light';
+        const acc = localStorage.getItem('nish_accent') || '#3b82f6';
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.style.setProperty('--accent', acc);
+      } catch(e){}
+    })();
+  </script>
 </head>
 
 <body data-page="progress">
 
   <header class="site-header">
-    <div class="brand">Nish • Training</div>
+    <a class="brand" href="index.html">NG’s Workout Log</a>
     <nav class="main-nav">
-      <a href="index.html">Log</a>
+      <a href="log.html">Log</a>
       <a href="history.html">History</a>
       <a href="progress.html">Progress</a>
       <a href="weight.html">Weight</a>
+      <a href="programs.html">Programs</a>
       <a href="settings.html">Settings</a>
     </nav>
+    <div class="quick-theme">
+      <button id="theme-toggle" class="btn-ghost small">🌓</button>
+    </div>
   </header>
 
   <main class="container">
@@ -43,11 +58,6 @@
       <div id="progress-summary" class="summary"></div>
     </section>
   </main>
-
-  <footer>
-    <small>Progressive overload, intelligently. 💪</small>
-  </footer>
-
   <script src="app.js"></script>
 </body>
 </html>

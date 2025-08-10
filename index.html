@@ -3,118 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Log Workout</title>
+  <title>NG’s Workout Log — Home</title>
   <link rel="stylesheet" href="styles.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Early theme apply to avoid FOUC
+    (function(){
+      try {
+        const t = localStorage.getItem('nish_theme') || 'light';
+        const acc = localStorage.getItem('nish_accent') || '#3b82f6';
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.style.setProperty('--accent', acc);
+      } catch(e){}
+    })();
+  </script>
 </head>
 
-<body data-page="log">
+<body data-page="home">
 
   <header class="site-header">
-    <div class="brand">Nish • Training</div>
+    <a class="brand" href="index.html">NG’s Workout Log</a>
     <nav class="main-nav">
-      <a href="index.html">Log</a>
+      <a href="log.html">Log</a>
       <a href="history.html">History</a>
       <a href="progress.html">Progress</a>
       <a href="weight.html">Weight</a>
+      <a href="programs.html">Programs</a>
       <a href="settings.html">Settings</a>
     </nav>
+    <div class="quick-theme">
+      <button id="theme-toggle" class="btn-ghost small">🌓</button>
+    </div>
   </header>
 
-  <main class="container">
-    <section class="panel">
-      <h1>Log Workout</h1>
-      <p class="hint">Pick a category, add exercises/sets. Auto targets appear under each exercise based on your history (6–10 rep scheme; +2.5% load when you hit 10).</p>
-
-      <div class="row rest-row">
-        <div class="rest-timer card">
-          <strong>Rest Timer</strong>
-          <div class="rest-display"><span id="rest-mm">00</span>:<span id="rest-ss">00</span></div>
-          <div class="rest-controls">
-            <button type="button" class="btn-ghost rest-start" data-sec="60">60s</button>
-            <button type="button" class="btn-ghost rest-start" data-sec="90">90s</button>
-            <button type="button" class="btn-ghost rest-start" data-sec="120">120s</button>
-            <input type="number" id="rest-custom" placeholder="sec" min="1"/>
-            <button type="button" class="btn-accent" id="rest-start-custom">Start</button>
-            <button type="button" class="btn-danger" id="rest-stop">Stop</button>
-          </div>
+  <main class="container home">
+    <section class="hero panel">
+      <div class="hero-text">
+        <h1>NG’s Workout Log</h1>
+        <p class="muted">Track lifts. See trends. Nudge the numbers up—on purpose.</p>
+        <div class="cta-row">
+          <a href="log.html" class="btn-primary">Log a Workout</a>
+          <a href="progress.html" class="btn-accent">View Progress</a>
         </div>
       </div>
+      <div class="hero-art">
+        <!-- Simple SVG animations: barbell + plates -->
+        <svg viewBox="0 0 400 200" class="barbell">
+          <rect x="50" y="95" width="300" height="10" rx="5" class="bar"></rect>
+          <g class="plate left">
+            <rect x="40" y="75" width="8" height="50" rx="2"></rect>
+            <rect x="30" y="70" width="8" height="60" rx="2"></rect>
+            <rect x="20" y="65" width="8" height="70" rx="2"></rect>
+          </g>
+          <g class="plate right">
+            <rect x="352" y="75" width="8" height="50" rx="2"></rect>
+            <rect x="362" y="70" width="8" height="60" rx="2"></rect>
+            <rect x="372" y="65" width="8" height="70" rx="2"></rect>
+          </g>
+        </svg>
+        <div class="kettlebell"></div>
+      </div>
+    </section>
 
-      <form id="workout-form">
-        <input type="hidden" id="edit-id" value=""/>
-        <div class="row">
-          <label>Date
-            <input type="date" id="wdate" required />
-          </label>
-          <label>Category / Split
-            <div class="cat-inline">
-              <select id="wsplit" required></select>
-              <span id="cat-color-dot" class="dot"></span>
-              <a href="settings.html" class="btn-ghost small">Manage</a>
-            </div>
-          </label>
-          <label>Notes
-            <input type="text" id="wnotes" placeholder="optional"/>
-          </label>
-        </div>
-
-        <h3>Exercises</h3>
-        <div id="exercise-list"></div>
-        <div class="row">
-          <label>Quick add from template
-            <select id="template-ex">
-              <option value="">— choose —</option>
-            </select>
-          </label>
-          <button type="button" id="add-exercise" class="btn-accent">+ Add Exercise</button>
-        </div>
-
-        <div class="actions">
-          <button type="submit" class="btn-primary" id="save-btn">Save Workout</button>
-          <button type="button" id="clear-form" class="btn-ghost">Clear</button>
-        </div>
-      </form>
-      <div id="guardrail" class="warn-box" style="display:none"></div>
+    <section class="panel quick-links">
+      <h2>Quick links</h2>
+      <div class="grid-3">
+        <a class="card link" href="history.html"><strong>History</strong><span>Browse past sessions fast</span></a>
+        <a class="card link" href="weight.html"><strong>Bodyweight</strong><span>Spot trends & rate of change</span></a>
+        <a class="card link" href="programs.html"><strong>Programs</strong><span>Build custom routines & goals</span></a>
+      </div>
     </section>
   </main>
 
   <footer>
-    <small>Progressive overload, intelligently. 💪</small>
+    <small>Built for progression, not vibes. Well—okay, a little for vibes.</small>
   </footer>
-
-  <template id="exercise-template">
-    <div class="exercise card">
-      <div class="row">
-        <label>Exercise
-          <input type="text" class="ex-name" placeholder="e.g., Lat Pulldown" required />
-        </label>
-        <label>Notes
-          <input type="text" class="ex-notes" placeholder="tempo / form cue (optional)"/>
-        </label>
-        <button class="remove-ex btn-danger" type="button">Remove Exercise</button>
-      </div>
-      <div class="auto-target hint"></div>
-      <div class="sets">
-        <div class="set-row header">
-          <span>#</span><span>Weight (kg)</span><span>Reps</span><span>RPE</span><span>Failure</span><span>Remove</span>
-        </div>
-        <div class="set-container"></div>
-        <button class="add-set btn-ghost" type="button">+ Add Set</button>
-      </div>
-    </div>
-  </template>
-
-  <template id="set-template">
-    <div class="set-row">
-      <span class="set-idx"></span>
-      <input type="number" step="0.25" min="0" class="set-weight" placeholder="kg" required />
-      <input type="number" min="1" class="set-reps" placeholder="reps" required />
-      <input type="number" min="1" max="10" class="set-rpe" placeholder="RPE" />
-      <input type="checkbox" class="set-failure" />
-      <button class="remove-set btn-danger" type="button">✕</button>
-    </div>
-  </template>
 
   <script src="app.js"></script>
 </body>
