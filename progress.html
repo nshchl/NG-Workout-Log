@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Progress</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body data-page="progress">
+
+  <header class="site-header">
+    <div class="brand">Nish • Training</div>
+    <nav class="main-nav">
+      <a href="index.html">Log</a>
+      <a href="history.html">History</a>
+      <a href="progress.html">Progress</a>
+      <a href="weight.html">Weight</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <h1>Progress</h1>
+      <div class="row">
+        <label>Exercise
+          <select id="progress-ex"></select>
+        </label>
+        <label>Metric
+          <select id="progress-metric">
+            <option value="est1rm">Estimated 1RM (Epley)</option>
+            <option value="best_reps_weight">Best Weight×Reps</option>
+            <option value="volume">Weekly Volume (kg)</option>
+          </select>
+        </label>
+        <button id="refresh-progress" type="button" class="btn-accent">Refresh</button>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="progress-chart" height="160"></canvas>
+      </div>
+      <div id="progress-summary" class="summary"></div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Progressive overload, intelligently. 💪</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

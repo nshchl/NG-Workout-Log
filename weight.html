@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bodyweight</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body data-page="weight">
+
+  <header class="site-header">
+    <div class="brand">Nish • Training</div>
+    <nav class="main-nav">
+      <a href="index.html">Log</a>
+      <a href="history.html">History</a>
+      <a href="progress.html">Progress</a>
+      <a href="weight.html">Weight</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <h1>Bodyweight</h1>
+      <div class="row">
+        <label>Date
+          <input type="date" id="bw-date" />
+        </label>
+        <label>Weight (kg)
+          <input type="number" step="0.01" min="0" id="bw-kg" />
+        </label>
+        <label>Notes
+          <input type="text" id="bw-notes" placeholder="optional"/>
+        </label>
+        <button id="bw-add" class="btn-accent" type="button">Add</button>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="bw-chart" height="160"></canvas>
+      </div>
+
+      <div id="bw-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Progressive overload, intelligently. 💪</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

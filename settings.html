@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Settings</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body data-page="settings">
+
+  <header class="site-header">
+    <div class="brand">Nish • Training</div>
+    <nav class="main-nav">
+      <a href="index.html">Log</a>
+      <a href="history.html">History</a>
+      <a href="progress.html">Progress</a>
+      <a href="weight.html">Weight</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <h1>Settings</h1>
+      <h3>Categories</h3>
+      <p class="hint">Presets power the split selector. Add your own (choose a color).</p>
+      <div id="cat-list" class="cat-list"></div>
+      <div class="row">
+        <label>Name
+          <input type="text" id="cat-name" placeholder="e.g., Upper, Push, etc."/>
+        </label>
+        <label>Color
+          <input type="color" id="cat-color" value="#6c8cff"/>
+        </label>
+        <button id="cat-add" class="btn-accent" type="button">Add / Update</button>
+        <button id="cat-clear" class="btn-ghost" type="button">Clear</button>
+      </div>
+
+      <hr class="sep"/>
+
+      <div class="row">
+        <button id="export-json" type="button" class="btn-primary">Export Data (JSON)</button>
+        <input type="file" id="import-file" accept="application/json"/>
+        <button id="import-json" type="button" class="btn-accent">Import</button>
+        <button id="reset-data" type="button" class="btn-danger">Reset All Data</button>
+      </div>
+      <p class="hint">Data is saved in your browser via localStorage. Export regularly if you change devices.</p>
+    </section>
+  </main>
+
+  <footer>
+    <small>Progressive overload, intelligently. 💪</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
